@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+        <!--<meta http-equiv="cleartype" content="on"> -->
+
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/touch/apple-touch-icon-144x144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/touch/apple-touch-icon-114x114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/touch/apple-touch-icon-72x72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="img/touch/apple-touch-icon-57x57-precomposed.png">
+        <link rel="shortcut icon" sizes="196x196" href="img/touch/touch-icon-196x196.png">
+        <link rel="shortcut icon" href="img/touch/apple-touch-icon.png">
+
+        <!-- Tile icon for Win8 (144x144 + tile color) -->
+        <meta name="msapplication-TileImage" content="img/touch/apple-touch-icon-144x144-precomposed.png">
+        <meta name="msapplication-TileColor" content="#222222">
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/timerButton.css">
+        <script src="js/vendor/modernizr-2.7.1.min.js"></script>
+        <script src="js/timer.js"></script>
+    </head>
+    <body>
+
+        <div style="align-content: center;color: activecaption">
+            <h1 id="co" > Toastmaster Timer </h1> <br/>
+        </div>
+        <div >
+            <label id="chLabel">Custom Speech
+                <input id="ch1" type="checkbox" name="Custom Speech" value="ON"  onclick="myFunction()"/> </label> <br/> <br/><br/>
+            <form style="display:block" id="sele1">
+                <label>Speech Type <select name="Speech Type" id="selectSpeech">
+                        <option value="tableTopics">Table Topics™ (1-2)</option>
+                        <option value="evaluation">Evaluation (2-3) </option>
+                        <option value="iceBreaker">Icebreaker (4-6) </option>
+                        <option value="stdSpeech">Std.Speech (5-7) </option>
+                        <option value="advSpeech">Adv.Speech (7-9) </option>
+                        <option value="test">Test</option>
+                    </select></label> 
+            </form> 
+            <form id="custom" name="custom" style="display:none">
+                <label style="color: green">Green <input id="gr" type="text" name="Green" value="" size="5" maxlength="5" /> </label>&ensp;
+                <label style="color: gold">Yellow <input id="yel" type="text" name="Yellow" value="" size="5" /></label>&ensp;
+                <label style="color: red">Red <input id="red" type="text" name="Red" value="" size="5" /></label>&ensp;
+            </form>       
+        </div>
+        <br/> <br/>
+        <div id="controls">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div> 
+        <br/><br/><br/>
+        <div id="timer" >
+            <span id="hours">00:</span>
+            <span id="mins">00:</span>
+            <span id="seconds">00</span>  
+        </div><br/> <br/>
+        <div>
+            <!-- <button id="btn">Show selected</button> <br/> -->
+            <div id="display"></div>
+            <!-- <script src="js/get_selected_option.js"></script> -->
+        </div>
+
+        <!----  -->
+        <script>
+            function myFunction() {
+                // Get the checkbox
+                var checkBox = document.getElementById("ch1");
+                var selectList = document.getElementById("sele1");
+                // Get the output text
+                var text = document.getElementById("custom");
+
+                // If the checkbox is checked, display the output text
+                if (checkBox.checked == true) {
+                    text.style.display = "block";
+                    selectList.style.display = "none";
+                } else {
+                    text.style.display = "none";
+                    selectList.style.display = "block";
+                }
+            }
+        </script>           
+
+        <script>
+
+            var hours = 0;
+            var mins = 0;
+            var seconds = 0;
+
+            var speechCheckBox = document.getElementById("ch1");
+
+            var speechType = document.getElementById("selectSpeech");
+            var speechText = document.getElementById("speechs");
+
+            var greenTime = document.getElementById("gr");
+            var yellowTime = document.getElementById("yel");
+            var redTime = document.getElementById("red");
+
+            var clocksH = document.getElementById("hours");
+            var clocksM = document.getElementById("mins");
+            var clocksS = document.getElementById("seconds");
+
+
+
+            $('#start').click(function () {
+                startTimer();
+            });
+
+            $('#stop').click(function () {
+                clearTimeout(timex);
+            });
+
+            $('#reset').click(function () {
+                hours = 0;
+                mins = 0;
+                seconds = 0;
+                $('#hours', '#mins').html('00:');
+                $('#mins').html('00:');
+                $('#seconds').html('00');
+                ChangeColor("#000");
+            });
+
+            function startTimer() {
+                timex = setTimeout(function () {
+
+                    seconds++;
+                    if (speechCheckBox.checked == true) {
+                        $("#speechText").text(speechType.value)
+                        if (mins >= greenTime.value) {
+                            ChangeColor("green");
+
+                           // $.get("http://192.168.4.1/D2/1");
+
+                        }
+                        if (mins >= yellowTime.value) {
+                            ChangeColor("gold");
+                        }
+                        if (mins >= redTime.value) {
+                            ChangeColor("red");
+                        }
+                    } else {
+                        var selector = document.getElementById('selectSpeech');
+                        var value = selector[selector.selectedIndex].value;
+                        var speechTime = ["1", "2", "3"];
+                        $("#speechText").text(speechType.value)
+                        if (mins >= speechTime[0]) {
+                            ChangeColor("green");
+                        }
+                        if (mins >= speechTime[1]) {
+                            ChangeColor("gold");
+                        }
+                        if (mins >= speechTime[2]) {
+                            ChangeColor("red");
+                        }
+
+                    }
+                    if (seconds > 59) {
+                        seconds = 0;
+                        mins++;
+                        if (mins > 59) {
+
+                            mins = 0;
+                            hours++;
+                            if (hours < 10) {
+                                $("#hours").text('0' + hours + ':')
+                            } else
+                                $("#hours").text(hours + ':');
+                        }
+
+                        if (mins < 10) {
+                            $("#mins").text('0' + mins + ':');
+                        } else
+                            $("#mins").text(mins + ':');
+                    }
+                    if (seconds < 10) {
+                        $("#seconds").text('0' + seconds);
+                    } else {
+                        $("#seconds").text(seconds);
+                    }
+
+
+                    startTimer();
+                }, 1000);
+            }
+            function ChangeColor(colorV) {
+                clocksH.style.color = colorV;
+                clocksM.style.color = colorV;
+                clocksS.style.color = colorV;
+            }
+
+            // function speechType(speechType) {
+            //     document.getElementById('display').innerHTML = speechType;
+            //     var tableTopics = ["1", "1:30", "2"];
+            //    var evaluation = ["1", "1:30", "2"];
+            //      var iceBreaker = ["4", "5", "6"];
+            //      var stdSpeech = ["5", "6", "7"];
+            //      var advSpeech = ["8", "9", "10"];
+            //      var test = ["1", " 2", "3"];
+            //      speechType = speechType.valueOf(speechType)
+            //      return test;
+            //   }
+
+            //function httpGet(theUrl)
+          //  {
+          //      var xmlHttp = new XMLHttpRequest();
+         //       xmlHttp.open("GET", "http://192.168.1.4/D2/1", false); // false for synchronous request
+         //       xmlHttp.send(null);
+         //       return xmlHttp.responseText;
+        //    }
+
+        </script>
+    </body>
+</html>
